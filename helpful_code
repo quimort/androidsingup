@@ -1,0 +1,65 @@
+protected void sendJson(final String email, final String pwd) {
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost(URL);
+                    json.put("email", email);
+                    json.put("password", pwd);
+                    StringEntity se = new StringEntity( json.toString());  
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                    /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    createDialog("Error", "Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+
+        t.start();      
+    }
+    
+    -----------------------------------------------------------------------------------------------------------
+    public void postData(String url,JSONObject obj) {
+    // Create a new HttpClient and Post Header
+
+    HttpParams myParams = new BasicHttpParams();
+    HttpConnectionParams.setConnectionTimeout(myParams, 10000);
+    HttpConnectionParams.setSoTimeout(myParams, 10000);
+    HttpClient httpclient = new DefaultHttpClient(myParams );
+    String json=obj.toString();
+
+    try {
+
+        HttpPost httppost = new HttpPost(url.toString());
+        httppost.setHeader("Content-type", "application/json");
+
+        StringEntity se = new StringEntity(obj.toString()); 
+        se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+        httppost.setEntity(se); 
+
+        HttpResponse response = httpclient.execute(httppost);
+        String temp = EntityUtils.toString(response.getEntity());
+        Log.i("tag", temp);
+
+
+    } catch (ClientProtocolException e) {
+
+    } catch (IOException e) {
+    }
+}
