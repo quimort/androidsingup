@@ -1,0 +1,34 @@
+ SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(YourActivity.this);
+
+  prefs.edit().putInt("userid",userid).commit();
+  
+  int Userid;
+prefs = PreferenceManager.getDefaultSharedPreferences(YourActivity.this);
+Userid= mPrefs.getInt("userid", 0);  which will return defalut value 0 if u are not login 
+
+ if(Userid>0){
+  // Means  u are already logged in  do here code what u want if u are login 
+  }else{
+    // Means  u are not logged in than go to your login pageview from here
+ }
+ --------------------------------------------------------------------------------------------------
+ public class SaveSharedPreference 
+{
+    static final String PREF_USER_NAME= "username";
+
+    static SharedPreferences getSharedPreferences(Context ctx) {
+        return PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    public static void setUserName(Context ctx, String userName) 
+    {
+        Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_USER_NAME, userName);
+        editor.commit();
+    }
+
+    public static String getUserName(Context ctx)
+    {
+        return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
+    }
+}
